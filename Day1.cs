@@ -10,8 +10,7 @@ namespace Aoc
 {
     public class Day1
     {
-        //string input = "C:\\Users\\Korisnik\\Projekti\\AdventOfCode2023\\Inputs\\input.txt";
-        string input = "C:\\Users\\Korisnik\\Projekti\\AdventOfCode2023\\Inputs\\1.txt";
+        string input = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Inputs\1.txt"));
 
         public Day1()
         {
@@ -37,4 +36,5 @@ namespace Aoc
             Console.WriteLine(sum);
         }
     }
+
 }
