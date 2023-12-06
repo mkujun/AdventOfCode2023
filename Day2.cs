@@ -17,11 +17,11 @@ namespace Aoc
         public Day2()
         {
             int partOne = 0;
+            int partTwo = 0;
 
             foreach (string line in File.ReadLines(@input))
             {
                 bool gameValid = true;
-                //Console.WriteLine(line);
 
                 string game = line.Split(':')[0];
                 int gameNo = Int32.Parse(game.Split(' ')[1]);
@@ -46,14 +46,29 @@ namespace Aoc
                         if (color.Contains("red"))
                         {
                             red = Int32.Parse(string.Join("", color.ToCharArray().Where(Char.IsDigit)));
+
+                            if (red > redMax)
+                            {
+                                redMax = red;
+                            }
                         }
-                        else if (color.Contains("blue"))
+                        if (color.Contains("blue"))
                         {
                             blue = Int32.Parse(string.Join("", color.ToCharArray().Where(Char.IsDigit)));
+                            
+                            if (blue > blueMax)
+                            {
+                                blueMax = blue;
+                            }
                         }
-                        else if (color.Contains("green"))
+                        if (color.Contains("green"))
                         {
                             green = Int32.Parse(string.Join("", color.ToCharArray().Where(Char.IsDigit)));
+
+                            if (green > greenMax)
+                            {
+                                greenMax = green;
+                            }
                         }
                     }
                     
@@ -73,17 +88,17 @@ namespace Aoc
 
 
                 }
+                partTwo = partTwo + redMax * blueMax * greenMax;
 
 
                 if (gameValid)
                 {
-                    //Console.WriteLine("Game  valid");
-                    //Console.WriteLine("Game no", gameNo);
                     partOne = partOne + gameNo;
                 }
             }
 
             Console.WriteLine(partOne);
+            Console.WriteLine(partTwo);
         }
     }
 }
