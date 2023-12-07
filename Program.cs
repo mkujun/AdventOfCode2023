@@ -1,8 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Aoc;
 
-//Console.WriteLine("Hello, World!");
-using Aoc;
-
-Day2 day2 = new Day2();
+Day4 day = new Day4();
 
 
