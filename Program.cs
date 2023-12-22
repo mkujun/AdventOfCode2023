@@ -1,5 +1,5 @@
 ﻿using Aoc;
 
-Day4 day = new Day4();
+Day3 day = new Day3();
 
 
