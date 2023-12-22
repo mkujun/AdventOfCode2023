@@ -76,16 +76,14 @@ namespace Aoc
         // TODO: finish this one...
         public void CheckAroundNumber(int i, int jBegin, int jEnd, string rowNumber)
         {
-            for (int k = jBegin; k < jEnd; k++)
+            try
             {
-                try
-                {
+                // look up, left, down and right for entire number index...
 
-                }
-                catch (IndexOutOfRangeException ex)
-                {
+            }
+            catch (IndexOutOfRangeException ex)
+            {
 
-                }
             }
         }
 
