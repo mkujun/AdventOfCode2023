@@ -4,26 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// 140x140 (real), 10x10 (test)
-
 namespace Aoc
 {
     public class Day3
     {
-        //string input = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Inputs\input.txt"));
         string input = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Inputs\3.txt"));
 
         List<char[]> matrix = new List<char[]>();
+        Dictionary<string, List<int>> gears = new Dictionary<string, List<int>>();
 
         static int rows = 140;
         static int columns = 140;
 
-        /*
-        static int rows = 10;
-        static int columns = 10;
-        */
-
         List<int> part1 = new List<int>();
+        int part2 = 0;
 
         public void ConvertInputToMatrix()
         {
@@ -93,26 +87,24 @@ namespace Aoc
             }
         }
 
-        static bool AreAllCharsSame(List<char> charList, char targetChar)
+        public void AddGear(int i, int j, string rowNumber)
         {
-            // Check if every character is the same as the target character.
-            foreach (char c in charList)
+            string key = (i).ToString() + j.ToString();
+
+            if (gears.ContainsKey(key))
             {
-                if (c != targetChar)
-                {
-                    return false;
-                }
+                gears[key].Add(Int32.Parse(rowNumber));
             }
 
-            return true;
+            else
+            {
+                gears.Add(key, new List<int>());
+                gears[key].Add(Int32.Parse(rowNumber));
+            }
         }
 
         public void CheckAroundNumber(int i, int jBegin, int jEnd, string rowNumber)
         {
-            if (i == 13 && rowNumber == "738")
-            {
-
-            }
             // above
             List<char> rowAbove = new List<char>();
 
@@ -120,6 +112,11 @@ namespace Aoc
             {
                 try
                 {
+                    if (matrix[i - 1][k] == '*')
+                    {
+                        AddGear(i - 1, k, rowNumber);
+                    }
+
                     rowAbove.Add(matrix[i - 1][k]);
                 }
                 catch (Exception ex)
@@ -135,6 +132,11 @@ namespace Aoc
             {
                 try
                 {
+                    if (matrix[i][k] == '*')
+                    {
+                        AddGear(i, k, rowNumber);
+                    }
+
                     rowCurrent.Add(matrix[i][k]);
                 }
                 catch (Exception ex)
@@ -150,6 +152,11 @@ namespace Aoc
             {
                 try
                 {
+                    if (matrix[i + 1][k] == '*')
+                    {
+                        AddGear(i + 1, k, rowNumber);
+                    }
+
                     rowBellow.Add(matrix[i + 1][k]);
                 }
                 catch (Exception ex)
@@ -158,19 +165,23 @@ namespace Aoc
                 }
             }
 
-            if (!AreAllCharsSame(rowAbove, '.') || !AreAllCharsSame(rowCurrent, '.') || !AreAllCharsSame(rowBellow, '.'))
-            {
-                part1.Add(Int32.Parse(rowNumber));
-            }
         }
 
         public Day3()
         {
             ConvertInputToMatrix();
-            //PrintMatrix();
             ReadMatrix();
 
-            Console.WriteLine(part1.Sum());
+            foreach (var valuesList in gears.Values)
+            {
+                if (valuesList.Count == 2)
+                {
+                    int result = valuesList[0] * valuesList[1];
+                    part2 = part2 + result;
+                }
+            }
+
+            Console.WriteLine(part2);
         }
     }
 }
