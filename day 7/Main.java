@@ -7,6 +7,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Path filePath = Paths.get("src/input2.txt");
+        //Path filePath = Paths.get("src/input.txt");
         List<String> lines = Utils.readFile(filePath);
         List<Hand> handList = new ArrayList<>();
 
@@ -15,7 +16,7 @@ public class Main {
             handList.add(hand);
         }
 
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 4000; i++) {
             sortByType(handList);
             sortByLabel(handList);
         }
@@ -72,7 +73,7 @@ public class Main {
             sum = sum + rank * Integer.parseInt(handList.get(i).getBid());
         }
 
-        System.out.println("part 1 " + sum);
+        System.out.println("part 2 " + sum);
     }
 }
 
@@ -82,7 +83,7 @@ class Hand {
     }
 
     enum Label {
-        A, K, Q, J, T, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
+        A, K, Q, T, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO, J
     }
 
     private String value;
@@ -122,7 +123,50 @@ class Hand {
             }
         }
 
-        this.type = defineType(charCountMap);
+        if (charCountMap.containsKey('J')) {
+            this.type = defineJ(charCountMap);
+        }
+        else {
+            this.type = defineType(charCountMap);
+        }
+    }
+
+    private CamelCardHand defineJ(HashMap<Character, Integer> charMap) {
+        if (charMap.containsValue(4) || charMap.containsValue(5)) {
+            return CamelCardHand.FIVE;
+        }
+        if (charMap.containsValue(3) && charMap.containsValue(2)) {
+            return CamelCardHand.FIVE;
+        }
+        if (charMap.containsValue(3) && !charMap.containsValue(2)) {
+            return CamelCardHand.FOUR;
+        }
+
+        if (charMap.containsValue(2)) {
+            int size = charMap.size();
+
+            if (size == 4) {
+                return CamelCardHand.THREE;
+            }
+
+            if (size == 3) {
+                int j = charMap.get('J');
+
+                if (j == 1) {
+                    return CamelCardHand.FULL_HOUSE;
+                }
+                if (j == 2) {
+                    return CamelCardHand.FOUR;
+                }
+
+            }
+        }
+
+        if (charMap.containsValue(1)) {
+            return CamelCardHand.ONE_PAIR;
+        }
+
+        return null;
     }
 
     private CamelCardHand defineType(HashMap<Character, Integer> charMap) {
@@ -163,8 +207,6 @@ class Hand {
                 return Hand.Label.K;
             case 'Q':
                 return Hand.Label.Q;
-            case 'J':
-                return Hand.Label.J;
             case 'T':
                 return Hand.Label.T;
             case '9':
@@ -183,6 +225,8 @@ class Hand {
                 return Hand.Label.THREE;
             case '2':
                 return Hand.Label.TWO;
+            case 'J':
+                return Hand.Label.J;
             default:
                 throw new IllegalArgumentException("Invalid rank character: " + rankChar);
         }
